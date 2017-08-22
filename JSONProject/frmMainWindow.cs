@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using System.Net;
+using System.IO;
 
 namespace JSONProject
 {
@@ -18,10 +20,6 @@ namespace JSONProject
             InitializeComponent();
         }
 
-        private void cmdClear_Click(object sender, EventArgs e)
-        {
-            txtOutput.Text = String.Empty;
-        }
 
 
         private void deserialiseJson(string strJson)
@@ -29,7 +27,7 @@ namespace JSONProject
             try
             {
                 var jsonObject = JsonConvert.DeserializeObject<dynamic>(strJson);
-                txtOutput.Text = jsonObject.username;
+                txtOutput.Text = jsonObject.ToString();
             }
             catch(Exception ex)
             {
@@ -37,9 +35,30 @@ namespace JSONProject
             }
         }
 
+
+
+        #region EventHandler
+        private void cmdGetUrl_Click(object sender, EventArgs e)
+        {
+            String url = txtUrl.Text;
+            RestClient rClient = new RestClient();
+            rClient.endPiont = url;
+            txtInputJson.Text = rClient.getWebContent();
+        }
+
+        private void cmdClear_Click(object sender, EventArgs e)
+        {
+            txtOutput.Text = String.Empty;
+        }
+
         private void cmdDeserialise_Click(object sender, EventArgs e)
         {
             deserialiseJson(txtInputJson.Text);
         }
+
+        #endregion
+
+
+
     }
 }
